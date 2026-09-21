@@ -26,7 +26,7 @@ jobs:
       - name: Checkout private scripts
         uses: actions/checkout@v4
         with:
-          repository: M-ichae-l/python_script_private
+          repository: strategy-sd3/py_script_for_release
           token: ${{ secrets.GH_PAT }}
           path: private_scripts
           sparse-checkout: |
