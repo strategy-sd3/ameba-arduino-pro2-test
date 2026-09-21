@@ -13,9 +13,9 @@ jobs:
     name: Build formatting matrix
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'push' && github.repository == 'strategy-sd3/ameba-arduino-pro2') ||
       (github.event_name == 'pull_request_target') ||
-      (github.event_name == 'schedule' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'schedule' && github.repository == 'strategy-sd3/ameba-arduino-pro2') ||
       (github.event_name == 'workflow_dispatch')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
