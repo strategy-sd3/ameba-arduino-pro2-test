@@ -1,0 +1,111 @@
+# This workflow runs coding_style_check test for Ameba Arduino SDK
+name: Check mbed coding style
+
+on:
+  push:
+  pull_request_target:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+jobs:
+  build-matrix:
+    name: Build formatting matrix
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'pull_request_target') ||
+      (github.event_name == 'schedule' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'workflow_dispatch')
+    outputs:
+      matrix: ${{ steps.gen-matrix.outputs.matrix }}
+    env:
+      # Customize excluded library directory names here (space-separated)
+      # Top-level libraries to drop from the matrix entirely
+      EXCLUDED_LIBS: "TFLite Adafruit_libs"
+      # Nested sub-paths to skip during file scanning (regex, pipe-separated)
+      EXCLUDED_PATHS_REGEX: "Adafruit"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          allow-unsafe-pr-checkout: true
+          submodules: recursive
+          sparse-checkout: |
+            Arduino_package/hardware/cores
+            Arduino_package/hardware/libraries
+      - name: Generate matrix JSON (objects with check + exclude)
+        id: gen-matrix
+        run: |
+          set -euo pipefail
+          CORE_PATH="Arduino_package/hardware/cores"
+          LIB_ROOT="Arduino_package/hardware/libraries"
+          echo "Excluded top-level libs : $EXCLUDED_LIBS"
+          echo "Excluded nested regex   : $EXCLUDED_PATHS_REGEX"
+          # Collect all first-level library directories (sorted for stable order)
+          mapfile -t ALL_LIB_DIRS < <(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort)
+          echo "All library directories:"
+          printf '  %s\n' "${ALL_LIB_DIRS[@]}"
+          # Filter out fully-excluded top-level libraries
+          KEEP=()
+          for d in "${ALL_LIB_DIRS[@]}"; do
+            skip=false
+            for ex in $EXCLUDED_LIBS; do
+              if [ "$d" = "$ex" ]; then
+                echo "Dropping excluded library: $d"
+                skip=true
+                break
+              fi
+            done
+            if [ "$skip" = false ]; then
+              KEEP+=("$LIB_ROOT/$d")
+            fi
+          done
+          echo "Libraries after exclusion:"
+          printf '  %s\n' "${KEEP[@]}"
+          # Build a JSON array of objects: [{check, exclude}, ...]
+          # Core path + every kept library share the same nested-exclude regex.
+          {
+            printf '%s\n' "$CORE_PATH"
+            printf '%s\n' "${KEEP[@]}"
+          } | jq -R --arg regex "$EXCLUDED_PATHS_REGEX" \
+                 '{check: ., exclude: $regex}' \
+             | jq -sc '.' > matrix.json
+          echo "Matrix JSON:"
+          cat matrix.json
+          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+  formatting-check:
+    name: Run clang-format check
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          allow-unsafe-pr-checkout: true
+          submodules: recursive
+          sparse-checkout: |
+            Arduino_package/hardware/cores
+            Arduino_package/hardware/libraries
+      - name: Checkout private clang-format config
+        uses: actions/checkout@v4
+        with:
+          repository: M-ichae-l/python_script_private
+          token: ${{ secrets.GH_PAT }}
+          path: _clang_config
+          sparse-checkout: |
+            coding_style_mbed/.clang-format
+      - name: Run C/C++/header files check
+        uses: M-ichae-l/clang-format-action@v1.0.0
+        with:
+          clang-format-version: '17'
+          check-path: ${{ matrix.path.check }}
+          exclude-regex: ${{ matrix.path.exclude }}
+          clang-format-style-path: _clang_config/coding_style_mbed/.clang-format
+          fallback-style: 'Mozilla'

@@ -1,0 +1,87 @@
+Pre Release Version 4.1.1
+
+Version 4.1.1 - 2026/03/06
+Version 4.1.1 - 2026/03/20
+Version 4.1.1 - 2026/04/02
+Version 4.1.1 - 2026/04/17
+Version 4.1.1 - 2026/04/30
+Version 4.1.1 - 2026/05/19
+Version 4.1.1 - 2026/06/03
+Version 4.1.1 - 2026/07/13
+Version 4.1.1 - 2026/08/13
+Version 4.1.1 - 2026/08/31
+Version 4.1.1 - 2026/09/15
+
+Feature:
+- Add Battery-Powered Camera POC Example
+- Add Audio Trigger Recording example
+- Add Video with Zoom feature
+- Add TensorFlowLite
+- Add AntiCollision POC and update POC example links
+- Add sound detector trigger example
+- Update PowerMode examples and API to support multiple wakeup sources
+- Add AMB82-zero
+- Add I2C Slave
+- Update I2C slave example guide links
+- Update  SDCardOTA and SDCardPlayMP3
+- Add support of PCA9685
+- Add example Wire\examples\PCA9685\3PositionTest
+- Add example Wire\examples\PCA9685\ServoSweep
+- Add example SPI\examples\graphicstest
+- Update OTA example for warnings
+- Add USB Host UVC Snapshot
+- Modify RecordMP4 with NTPClient Examples
+
+API Updates:
+- Update code base
+- Delete Arduino_package/hardware/libraries/POC-Example directory
+- Updated POC examples and Example folder name
+- Add audio high pass filter API
+- Add configureAutoReconnect API
+- Add .h to modify USE_SENSOR macro
+- Update ServerDrv API for WiFi TCP data corruption
+- Add application level source code at "system" folder
+- Add sensor K306P support
+- Update WDT API
+- Update codebase for ATcmd
+- Update API for AMB82-zero and SWD off logic
+- Update SPI API for SPI1 switching
+- Add SWD pin deinit check for I2C
+- Minor bug fix
+- Update codebase
+- Add Adafruits PWM Servo Driver library sources
+- Minor bug fix
+- Add Adafruit_libs
+- Update OTA API
+- Add Dmic clk and data pin selection function
+- Update end api to ensure compatibility with standard Arduino SPI
+- Code base update
+
+Misc:
+- Update tools version 1.4.8
+    - Add camera sensor support, IMX681, IMX681_12M, IMX681_12M_SEQ, OV50A40
+- Update SD_model
+- Update ameba_pro2_tools 1.4.9
+    - Add "Dev Mode" or "Fast Mode" for compilation
+    - Support camera sensor K306P
+    - Update signed tools
+    - Update img classification eg and nn_model.json
+- Update the Arduino IDE menu
+- Update ameba_pro2_tools 1.4.10
+    - remove unused modes
+    - minor bug fix
+- Add Arduino ZIP library submodules: JPEGDecoder and ArduCAM
+    - Add zip files
+- Update auto_zip_lib.yml
+- Update ameba_pro2_tools 1.4.11
+    - Add camera sensor IMX681_5M
+- Update ameba_pro2_tools 1.4.12
+    - Add camera sensor OV5647 and GC4663
+- Update ameba_pro2_tools 1.4.13
+    - Add camera sensor related bin files
+- Update platform for enabling exports OTA.bin
+- Update ameba_pro2_tools 1.4.14
+    - Add camera sensor FIXP_5M and FIXP_2K, for testing without camera
+- Add arm64-apple-darwin for tools
+- Update ameba_pro2_tools 1.4.15
+    - Fix installing issue related prebuild tool for old version
