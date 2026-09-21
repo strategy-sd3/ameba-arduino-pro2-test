@@ -11,6 +11,7 @@ Version 4.1.1 - 2026/07/13
 Version 4.1.1 - 2026/08/13
 Version 4.1.1 - 2026/08/31
 Version 4.1.1 - 2026/09/15
+Version 4.1.1 - 2026/09/21
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -30,6 +31,7 @@ Feature:
 - Add example SPI\examples\graphicstest
 - Update OTA example for warnings
 - Add USB Host UVC Snapshot
+- Modify RecordMP4 with NTPClient Examples
 - Modify RecordMP4 with NTPClient Examples
 
 API Updates:
@@ -53,6 +55,9 @@ API Updates:
 - Minor bug fix
 - Add Adafruit_libs
 - Update OTA API
+- Add Dmic clk and data pin selection function
+- Update end api to ensure compatibility with standard Arduino SPI
+- Code base update
 - Add Dmic clk and data pin selection function
 - Update end api to ensure compatibility with standard Arduino SPI
 - Code base update
@@ -83,5 +88,7 @@ Misc:
 - Update ameba_pro2_tools 1.4.14
     - Add camera sensor FIXP_5M and FIXP_2K, for testing without camera
 - Add arm64-apple-darwin for tools
+- Update ameba_pro2_tools 1.4.15
+    - Fix installing issue related prebuild tool for old version
 - Update ameba_pro2_tools 1.4.15
     - Fix installing issue related prebuild tool for old version
