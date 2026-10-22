@@ -40,15 +40,11 @@
             },
             {
               "packager": "realtek",
-              "version": "1.4.15"
+              "name": "ameba_pro2_nn_models",
               "version": "1.0.3"
             }
           ]
-        }
-      ],
-      "tools": [
-  {
-          "name": "ameba_pro2_nn_models",
+        },
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
@@ -112,7 +108,7 @@
               "size":"37724966"
             }
           ]
-        }
+        },
 		{
           "name": "ameba_pro2_toolchain",
           "version":"1.0.2-p1",
